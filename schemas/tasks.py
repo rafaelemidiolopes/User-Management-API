@@ -1,0 +1,27 @@
+from pydantic import BaseModel, Field
+from typing import Optional
+
+class TaskBase(BaseModel):
+    title: str = Field(min_length=3)
+    description: Optional[str]
+    
+class TaskCreate(TaskBase):
+    pass
+
+class TaskUpdate(TaskBase):
+    title: Optional[str]
+    
+class TaskResponse(TaskBase):
+    id: int
+    title: str
+    description: str
+    
+    class Config:
+        from_attributes = True
+
+class TaskWithUserResponse(TaskResponse):
+    id: int
+    title: str
+    description: str
+    status: str
+    user_id = int
