@@ -1,9 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from schemas.users import UserResponse, UserCreate, UserUpdate, UserWithTasksResponse
 from database import get_db
 from models.users import User
-from models.tasks import Task
 from typing import List
 
 router = APIRouter()
@@ -71,6 +70,6 @@ def delete_user(id_user: int, db: Session = Depends(get_db)):
     
     db.commit()
     
-@router.get('/users/UsersWithTasks', status_code=200, response_model=List[UserWithTasksResponse])
+@router.get('/users/users-with-tasks', status_code=200, response_model=List[UserWithTasksResponse])
 def get_users_with_tasks(db: Session = Depends(get_db)):
-    return db.query(User).join(Task)
+    return db.query(User).filter(User.tasks.any()).options(selectinload(User.tasks)).all()
