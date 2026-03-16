@@ -1,7 +1,7 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session, joinedload
 from typing import List
-from schemas.tasks import TaskResponse
+from schemas.tasks import TaskResponse, TaskUpdate
 from database import get_db
 from models.tasks import Task
 
@@ -14,3 +14,18 @@ def get_tasks(db: Session = Depends(get_db)):
 @router.get('/tasks/{task_id}', response_model=TaskResponse)
 def get_task(task_id: int, db: Session = Depends(get_db)):
     return db.query(Task).filter_by(id = task_id).all()
+
+@router.put('/tasks/{task_id}', response_model=TaskResponse)
+def update_task(task_id: int, task_updated = TaskUpdate, db: Session = Depends(get_db)):
+    task = db.query(Task).filter_by(id = task_id).all()
+    
+    if not task:
+        HTTPException(status_code=404, detail='Task not found! ')
+    
+    task.name = task_updated.name
+    task.description = task_updated.description
+    
+    db.commit()
+    db.refresh(Task)
+    
+    return task
