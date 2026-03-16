@@ -20,7 +20,7 @@ def update_task(task_id: int, task_updated = TaskUpdate, db: Session = Depends(g
     task = db.query(Task).filter_by(id = task_id).all()
     
     if not task:
-        HTTPException(status_code=404, detail='Task not found! ')
+        raise HTTPException(status_code=404, detail='Task not found! ')
     
     task.name = task_updated.name
     task.description = task_updated.description
