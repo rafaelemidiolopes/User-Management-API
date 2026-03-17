@@ -17,7 +17,7 @@ def get_task(task_id: int, db: Session = Depends(get_db)):
 
 @router.put('/tasks/{task_id}', response_model=TaskResponse)
 def update_task(task_id: int, task_updated = TaskUpdate, db: Session = Depends(get_db)):
-    task = db.query(Task).filter_by(id = task_id).all()
+    task = db.query(Task).filter_by(id = task_id).first()
     
     if not task:
         raise HTTPException(status_code=404, detail='Task not found! ')
