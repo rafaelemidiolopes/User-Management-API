@@ -13,7 +13,7 @@ def get_tasks(db: Session = Depends(get_db)):
 
 @router.get('/tasks/{task_id}', response_model=TaskResponse)
 def get_task(task_id: int, db: Session = Depends(get_db)):
-    return db.query(Task).filter_by(id = task_id).all()
+    return db.query(Task).filter_by(id = task_id).first()
 
 @router.put('/tasks/{task_id}', response_model=TaskResponse)
 def update_task(task_id: int, task_updated = TaskUpdate, db: Session = Depends(get_db)):
