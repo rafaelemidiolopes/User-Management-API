@@ -39,3 +39,7 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
         
     db.delete(task)
     db.commit()
+    
+@router.get('/tasks/tasks-with=user', response_model=List[TaskResponse])
+def get_tasks_with_user(db: Session = Depends(get_db)):
+    return db.query(Task).options(joinedload(Task.user)).all()
