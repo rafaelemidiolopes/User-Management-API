@@ -5,7 +5,7 @@ conexao = 'mysql+pymysql://root:12345r@localhost:3306/user_management_api'
 
 engine = create_engine(conexao)
 
-Session = sessionmaker(bind = engine)
+Session = sessionmaker(autocommit = False, autoflush = False, bind = engine)
 
 Base = declarative_base()
 
