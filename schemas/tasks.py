@@ -24,7 +24,7 @@ class TaskWithUserResponse(TaskResponse):
     title: str
     description: str
     status: str
-    user_id = int
+    user_id: int
     
     class Config:
         from_attributes = True

@@ -1,6 +1,6 @@
 from pydantic import EmailStr, BaseModel, Field
 from typing import Optional, List
-from tasks import TaskResponse
+from schemas.tasks import TaskResponse
 
 class UserBase(BaseModel):
     name: str = Field(min_length=3)
