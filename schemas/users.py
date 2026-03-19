@@ -13,8 +13,11 @@ class UserUpdate(UserBase):
     name: Optional[str] = None
     email: Optional[EmailStr] = None
     
-class UserResponse(UserBase):
+class UserResponse(BaseModel):
     id: int
+    name: str = Field(min_length=3)
+    email: EmailStr
+    
     class Config:
         from_atributes = True
         
