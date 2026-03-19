@@ -10,6 +10,14 @@ router = APIRouter()
 @router.get('/tasks', response_model=List[TaskResponse])
 def get_tasks(db: Session = Depends(get_db)):
     return db.query(Task).options(joinedload(Task.user)).all()
+    
+@router.get('/tasks/tasks-with-user', response_model=List[TaskResponse])
+def get_tasks_with_user(db: Session = Depends(get_db)):
+    return db.query(Task).options(joinedload(Task.user)).all()
+
+@router.get('tasks/tasks-without-user', response_model=List[TaskResponse])
+def get_tasks_without_user(db: Session = Depends(get_db)):
+    return db.query(Task).filter(Task.user_id.is_(None)).all()
 
 @router.get('/tasks/{task_id}', response_model=TaskResponse)
 def get_task(task_id: int, db: Session = Depends(get_db)):
@@ -39,11 +47,3 @@ def delete_task(task_id: int, db: Session = Depends(get_db)):
         
     db.delete(task)
     db.commit()
-    
-@router.get('/tasks/tasks-with-user', response_model=List[TaskResponse])
-def get_tasks_with_user(db: Session = Depends(get_db)):
-    return db.query(Task).options(joinedload(Task.user)).all()
-
-@router.get('tasks/tasks-without-user', response_model=List[TaskResponse])
-def get_tasks_without_user(db: Session = Depends(get_db)):
-    return db.query(Task).filter(Task.user_id.is_(None)).all()
