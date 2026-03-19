@@ -1,8 +1,9 @@
-from models.base import Base
-from database import engine
-from models.tasks import Task
-from models.users import User
+from database import engine, Base
 from fastapi import FastAPI
+from routers import users, tasks
+
+app = FastAPI()
 
 Base.metadata.create_all(engine)
-app = FastAPI()
+
+app.include_router(users.router)
