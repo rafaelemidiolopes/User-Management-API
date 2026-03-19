@@ -34,7 +34,7 @@ def update_task(task_id: int, task_updated = TaskUpdate, db: Session = Depends(g
     task.description = task_updated.description
     
     db.commit()
-    db.refresh(Task)
+    db.refresh(task)
     
     return task
 
