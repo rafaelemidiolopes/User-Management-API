@@ -14,6 +14,7 @@ class UserUpdate(UserBase):
     email: Optional[EmailStr] = None
     
 class UserResponse(UserBase):
+    id: int
     class Config:
         from_atributes = True
         
