@@ -59,7 +59,7 @@ def get_user(id_user: int, db: Session = Depends(get_db)):
     
     return user_exists
 
-@router.delete('/users/{id_user}', status_code=204, response_model=UserResponse)
+@router.delete('/users/{id_user}', status_code=204)
 def delete_user(id_user: int, db: Session = Depends(get_db)):
     user_exists = db.query(User).filter_by(id = id_user).first()
     
