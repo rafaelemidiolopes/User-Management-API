@@ -10,8 +10,11 @@ class TaskBase(BaseModel):
 class TaskCreate(TaskBase):
     pass
 
-class TaskUpdate(TaskBase):
-    title: Optional[str]
+class TaskUpdate(BaseModel):
+    title: str | None = Field(None, min_length = 3) 
+    description: str = None
+    status: str = None
+    user_id: int = None
     
 class TaskResponse(TaskBase):
     id: int
