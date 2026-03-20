@@ -6,7 +6,7 @@ class TaskBase(BaseModel):
     description: Optional[str]
     
 class TaskCreate(TaskBase):
-    pass
+    user_id: int | None
 
 class TaskUpdate(TaskBase):
     title: Optional[str]
