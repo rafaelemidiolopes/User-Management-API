@@ -8,7 +8,7 @@ class TaskBase(BaseModel):
     user_id: int = None
     
 class TaskCreate(TaskBase):
-    user_id: int | None
+    pass
 
 class TaskUpdate(TaskBase):
     title: Optional[str]
