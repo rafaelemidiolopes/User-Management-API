@@ -16,20 +16,12 @@ class TaskUpdate(BaseModel):
     status: str = None
     user_id: int = None
     
-class TaskResponse(TaskBase):
-    id: int
-    title: str
-    description: str
-    
-    class Config:
-        from_attributes = True
-
-class TaskWithUserResponse(TaskResponse):
+class TaskResponse(BaseModel):
     id: int
     title: str
     description: str
     status: str
     user_id: int
-    
+
     class Config:
         from_attributes = True
