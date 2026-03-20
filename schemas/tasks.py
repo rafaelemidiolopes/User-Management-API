@@ -4,6 +4,8 @@ from typing import Optional
 class TaskBase(BaseModel):
     title: str = Field(min_length=3)
     description: Optional[str]
+    status: str = 'Pending'
+    user_id: int = None
     
 class TaskCreate(TaskBase):
     user_id: int | None
