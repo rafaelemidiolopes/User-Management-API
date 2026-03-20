@@ -9,7 +9,7 @@ router = APIRouter()
 
 @router.post('/tasks', status_code=201, response_model=TaskResponse)
 def create_task(task: TaskCreate, db: Session = Depends(get_db)):
-    new_task = Task(title = task.title, description = task.description)
+    new_task = Task(title = task.title, description = task.description, user_id = task.user_id)
     
     db.add(new_task)
     
