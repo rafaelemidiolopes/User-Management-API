@@ -19,9 +19,9 @@ class TaskUpdate(BaseModel):
 class TaskResponse(BaseModel):
     id: int
     title: str
-    description: str
-    status: str
-    user_id: int
+    description: str | None
+    status: str | None
+    user_id: int | None
 
     class Config:
         from_attributes = True
