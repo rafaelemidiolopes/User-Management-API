@@ -19,7 +19,7 @@ class UserResponse(BaseModel):
     email: EmailStr
     
     class Config:
-        from_atributes = True
+        from_attributes = True
         
 class UserWithTasksResponse(UserResponse):
     tasks: List[TaskResponse]
