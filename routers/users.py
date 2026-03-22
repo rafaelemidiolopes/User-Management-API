@@ -14,7 +14,7 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
     
 @router.get('/users', status_code=200, response_model=List[UserResponse])
 def get_users(db: Session = Depends(get_db)):
-    return db.query(User).all()
+    return users.get_users(db)
     
 @router.get('/users/users-with-tasks', status_code=200, response_model=List[UserWithTasksResponse])
 def get_users_with_tasks(db: Session = Depends(get_db)):

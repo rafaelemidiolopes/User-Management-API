@@ -17,3 +17,6 @@ def create_user(user, db):
     db.refresh(new_user)
     
     return new_user
+
+def get_users(db):
+    return db.query(User).all()
