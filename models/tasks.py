@@ -12,7 +12,7 @@ class Task(Base):
     __tablename__ = 'tasks'
     
     id = Column(Integer, primary_key = True)
-    title = Column(String(50), nullable = False)
+    title = Column(String(50), nullable = False, unique= True)
     description = Column(String(100))
     status = Column(Enum(TaskStatus))
     
