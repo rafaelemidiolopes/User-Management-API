@@ -4,25 +4,13 @@ from schemas.users import UserResponse, UserCreate, UserUpdate, UserWithTasksRes
 from database import get_db
 from models.users import User
 from typing import List
+from services import users
 
 router = APIRouter()
 
 @router.post('/users', status_code=201, response_model=UserResponse)
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    user_existing = db.query(User).filter_by(email = user.email).first()
-    
-    if user_existing:
-        raise HTTPException(status_code=409, detail='Email already registered!')
-    
-    new_user = User(name = user.name, email = user.email)
-    
-    db.add(new_user)
-    
-    db.commit()
-    
-    db.refresh(new_user)
-    
-    return new_user
+    return users.create_user(user, db)
     
 @router.get('/users', status_code=200, response_model=List[UserResponse])
 def get_users(db: Session = Depends(get_db)):
