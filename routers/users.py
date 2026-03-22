@@ -34,21 +34,4 @@ def delete_user(id_user: int, db: Session = Depends(get_db)):
     
 @router.put('/users/{id_user}', status_code=200, response_model=UserResponse)
 def update_user(id_user: int, user_updated: UserUpdate, db: Session = Depends(get_db)):
-    get_user = db.query(User).filter_by(id = id_user).first()
-    
-    if not get_user:
-        raise HTTPException(status_code=404, detail='Id not exists!')
-    
-    email_existing = db.query(User).filter_by(email = user_updated.email).first()
-    
-    if email_existing and email_existing.id != id_user:
-        raise HTTPException(status_code=409, detail='Email already registered!')
-    
-    get_user.name = user_updated.name
-    get_user.email = user_updated.email
-    
-    db.commit()
-    
-    db.refresh(get_user)
-    
-    return get_user
+    return users.delete_user(id_user, user_updated, db)
