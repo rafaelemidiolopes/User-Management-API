@@ -26,12 +26,7 @@ def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
 
 @router.get('/users/{id_user}', status_code=200, response_model=UserResponse)
 def get_user(id_user: int, db: Session = Depends(get_db)):
-    user_exists = db.query(User).filter_by(id = id_user).first()
-    
-    if not user_exists:
-        raise HTTPException(status_code=404, detail='Id not exists!')
-    
-    return user_exists
+    return users.get_user(id_user, db)
 
 @router.delete('/users/{id_user}', status_code=204)
 def delete_user(id_user: int, db: Session = Depends(get_db)):

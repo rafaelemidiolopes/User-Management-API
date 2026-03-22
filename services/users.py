@@ -31,3 +31,11 @@ def get_user_tasks(user_id, db):
         raise HTTPException(status_code=404, detail='Id not exists!')
     
     return user_tasks
+
+def get_user(id_user, db):
+    user_exists = db.query(User).filter_by(id = id_user).first()
+    
+    if not user_exists:
+        raise HTTPException(status_code=404, detail='Id not exists!')
+    
+    return user_exists
