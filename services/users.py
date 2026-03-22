@@ -23,3 +23,11 @@ def get_users(db):
 
 def get_users_with_tasks(db):
     return db.query(User).filter(User.tasks.any()).options(selectinload(User.tasks)).all()
+
+def get_user_tasks(user_id, db):
+    user_tasks = db.query(User).filter_by(id = user_id).options(joinedload(User.tasks)).first()
+    
+    if not user_tasks:
+        raise HTTPException(status_code=404, detail='Id not exists!')
+    
+    return user_tasks

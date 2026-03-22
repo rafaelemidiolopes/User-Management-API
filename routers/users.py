@@ -22,12 +22,7 @@ def get_users_with_tasks(db: Session = Depends(get_db)):
 
 @router.get('/users/{user_id}/tasks', response_model=UserWithTasksResponse)
 def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
-    user_tasks = db.query(User).filter_by(id = user_id).options(joinedload(User.tasks)).first()
-    
-    if not user_tasks:
-        raise HTTPException(status_code=404, detail='Id not exists!')
-    
-    return user_tasks
+    return users.get_user_tasks(user_id, db)
 
 @router.get('/users/{id_user}', status_code=200, response_model=UserResponse)
 def get_user(id_user: int, db: Session = Depends(get_db)):
