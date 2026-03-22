@@ -25,3 +25,6 @@ def create_task(task, db):
 
 def get_tasks(db):
     return db.query(Task).options(joinedload(Task.user)).all()
+
+def get_tasks_with_user(db):
+    return db.query(Task).filter(Task.user_id != None).options(joinedload(Task.user)).all()

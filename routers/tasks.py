@@ -19,7 +19,7 @@ def get_tasks(db: Session = Depends(get_db)):
     
 @router.get('/tasks/tasks-with-user', response_model=List[TaskResponse])
 def get_tasks_with_user(db: Session = Depends(get_db)):
-    return db.query(Task).filter(Task.user_id != None).options(joinedload(Task.user)).all()
+    return tasks.get_tasks_with_user(db)
 
 @router.get('/tasks/tasks-without-user', response_model=List[TaskResponse])
 def get_tasks_without_user(db: Session = Depends(get_db)):
