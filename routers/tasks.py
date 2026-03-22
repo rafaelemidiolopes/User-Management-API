@@ -57,17 +57,19 @@ def update_task(task_id: int, task_updated: TaskUpdate, db: Session = Depends(ge
     if not task:
         raise HTTPException(status_code=404, detail='Task not found! ')
     
-    user = db.query(User).filter_by(id = task_updated.user_id).first()
+    if task_updated.user_id == 0:
+        task_updated.user_id = None
     
-    if not user and task_updated.user_id:
-        raise HTTPException(status_code=404, detail='User not found! ')
-    
-    
+    if task_updated.user_id != None:
+        user = db.query(User).filter_by(id = task_updated.user_id).first()
+        if not user:
+            raise HTTPException(status_code=404, detail='User not found! ')
+
     task.title = task_updated.title
     task.description = task_updated.description
     task.status = task_updated.status
     task.user_id = task_updated.user_id
-    
+        
     db.commit()
     db.refresh(task)
     
