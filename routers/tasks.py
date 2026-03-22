@@ -31,28 +31,7 @@ def get_task(task_id: int, db: Session = Depends(get_db)):
 
 @router.put('/tasks/{task_id}', response_model=TaskResponse)
 def update_task(task_id: int, task_updated: TaskUpdate, db: Session = Depends(get_db)):
-    task = db.query(Task).filter_by(id = task_id).first()
-    
-    if not task:
-        raise HTTPException(status_code=404, detail='Task not found! ')
-    
-    if task_updated.user_id == 0:
-        task_updated.user_id = None
-    
-    if task_updated.user_id != None:
-        user = db.query(User).filter_by(id = task_updated.user_id).first()
-        if not user:
-            raise HTTPException(status_code=404, detail='User not found! ')
-
-    task.title = task_updated.title
-    task.description = task_updated.description
-    task.status = task_updated.status
-    task.user_id = task_updated.user_id
-        
-    db.commit()
-    db.refresh(task)
-    
-    return task
+    return tasks.update_task(task_id, task_updated, db)
 
 @router.delete('/tasks/{task_id}', status_code=204)
 def delete_task(task_id: int, db: Session = Depends(get_db)):
