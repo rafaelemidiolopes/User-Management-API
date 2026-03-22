@@ -5,29 +5,13 @@ from schemas.tasks import TaskResponse, TaskUpdate, TaskCreate
 from database import get_db
 from models.tasks import Task
 from models.users import User
+from services import users, tasks
 
 router = APIRouter()
 
 @router.post('/tasks', status_code=201, response_model=TaskResponse)
 def create_task(task: TaskCreate, db: Session = Depends(get_db)):
-    new_task = Task(title = task.title, description = task.description, user_id = task.user_id)
-    
-    if new_task.user_id == 0:
-        new_task.user_id = None
-    
-    if new_task.user_id != None:
-        user_exists = db.query(User).filter_by(id = task.user_id).first()
-    
-        if not user_exists:
-            raise HTTPException(status_code=404, detail='User id not found! ')
-    
-    db.add(new_task)
-    
-    db.commit()
-    
-    db.refresh(new_task)
-    
-    return new_task
+    return tasks.create_task(task, db)
 
 @router.get('/tasks', response_model=List[TaskResponse])
 def get_tasks(db: Session = Depends(get_db)):
