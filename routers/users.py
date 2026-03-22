@@ -30,14 +30,7 @@ def get_user(id_user: int, db: Session = Depends(get_db)):
 
 @router.delete('/users/{id_user}', status_code=204)
 def delete_user(id_user: int, db: Session = Depends(get_db)):
-    user_exists = db.query(User).filter_by(id = id_user).first()
-    
-    if not user_exists:
-        raise HTTPException(status_code=404, detail='Id not exists!')
-    
-    db.query(User).filter_by(id = id_user).delete()
-    
-    db.commit()
+    users.delete_user(id_user, db)
     
 @router.put('/users/{id_user}', status_code=200, response_model=UserResponse)
 def update_user(id_user: int, user_updated: UserUpdate, db: Session = Depends(get_db)):
