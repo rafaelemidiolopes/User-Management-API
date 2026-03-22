@@ -23,7 +23,7 @@ def get_tasks_with_user(db: Session = Depends(get_db)):
 
 @router.get('/tasks/tasks-without-user', response_model=List[TaskResponse])
 def get_tasks_without_user(db: Session = Depends(get_db)):
-    return db.query(Task).filter(Task.user_id.is_(None)).all()
+    return tasks.get_tasks_without_user(db)
 
 @router.get('/tasks/{task_id}', response_model=TaskResponse)
 def get_task(task_id: int, db: Session = Depends(get_db)):
