@@ -18,7 +18,7 @@ def get_users(db: Session = Depends(get_db)):
     
 @router.get('/users/users-with-tasks', status_code=200, response_model=List[UserWithTasksResponse])
 def get_users_with_tasks(db: Session = Depends(get_db)):
-    return db.query(User).filter(User.tasks.any()).options(selectinload(User.tasks)).all()
+    return users.get_users_with_tasks(db)
 
 @router.get('/users/{user_id}/tasks', response_model=UserWithTasksResponse)
 def get_user_tasks(user_id: int, db: Session = Depends(get_db)):

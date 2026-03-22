@@ -20,3 +20,6 @@ def create_user(user, db):
 
 def get_users(db):
     return db.query(User).all()
+
+def get_users_with_tasks(db):
+    return db.query(User).filter(User.tasks.any()).options(selectinload(User.tasks)).all()
