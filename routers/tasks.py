@@ -15,7 +15,7 @@ def create_task(task: TaskCreate, db: Session = Depends(get_db)):
 
 @router.get('/tasks', response_model=List[TaskResponse])
 def get_tasks(db: Session = Depends(get_db)):
-    return db.query(Task).options(joinedload(Task.user)).all()
+    return tasks.get_tasks(db)
     
 @router.get('/tasks/tasks-with-user', response_model=List[TaskResponse])
 def get_tasks_with_user(db: Session = Depends(get_db)):

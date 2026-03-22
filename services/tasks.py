@@ -1,6 +1,7 @@
 from models.tasks import Task
 from models.users import User
 from fastapi import HTTPException
+from sqlalchemy.orm import joinedload
 
 def create_task(task, db):    
     new_task = Task(title = task.title, description = task.description, user_id = task.user_id)
@@ -21,3 +22,6 @@ def create_task(task, db):
     db.refresh(new_task)
     
     return new_task
+
+def get_tasks(db):
+    return db.query(Task).options(joinedload(Task.user)).all()
