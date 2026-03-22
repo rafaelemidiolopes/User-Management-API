@@ -2,16 +2,16 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 from models.base import Base
 
-conexao = 'mysql+pymysql://root:12345r@localhost:3306/user_management_api'
+DATABASE_URL = 'mysql+pymysql://root:12345r@localhost:3306/user_management_api'
 
-engine = create_engine(conexao)
+engine = create_engine(DATABASE_URL)
 
-Session = sessionmaker(autocommit = False, autoflush = False, bind = engine)
+SessionLocal = sessionmaker(autocommit = False, autoflush = False, bind = engine)
 
 Base = Base
 
 def get_db():
-    db = Session()
+    db = SessionLocal()
     try:
         yield db
     finally:
