@@ -65,3 +65,12 @@ def update_task(task_id, task_updated, db):
     db.refresh(task)
     
     return task
+
+def delete_task(task_id, db):
+    task = db.query(Task).filter_by(id = task_id).first()
+    
+    if not task:
+        raise HTTPException(status_code=404, detail='Task not found! ')
+        
+    db.delete(task)
+    db.commit()
