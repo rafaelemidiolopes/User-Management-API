@@ -31,3 +31,11 @@ def get_tasks_with_user(db):
 
 def get_tasks_without_user(db):
     return db.query(Task).filter(Task.user_id.is_(None)).all()
+
+def get_task(db, task_id):
+    task = db.query(Task).filter_by(id = task_id).first()
+
+    if not task:
+        raise HTTPException(status_code=404, detail='Task not found! ')
+    
+    return task
