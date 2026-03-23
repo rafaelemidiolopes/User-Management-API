@@ -1,8 +1,9 @@
-from sqlalchemy.orm import relationship
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum
+from __future__ import annotations
+from sqlalchemy.orm import relationship, Mapped, mapped_column
+from sqlalchemy import String, ForeignKey, Enum
 from models.base import Base
 import enum
-
+    
 class TaskStatus(str, enum.Enum):
     pending = 'pending'
     in_progress = 'in_progress'
@@ -11,10 +12,10 @@ class TaskStatus(str, enum.Enum):
 class Task(Base):
     __tablename__ = 'tasks'
     
-    id = Column(Integer, primary_key = True)
-    title = Column(String(50), nullable = False, unique= True)
-    description = Column(String(100))
-    status = Column(Enum(TaskStatus))
+    id: Mapped[int] = mapped_column(primary_key = True)
+    title: Mapped[str] = mapped_column(String(50), nullable = False, unique = True)
+    description: Mapped[str | None] = mapped_column(String(100))
+    status: Mapped[TaskStatus] = mapped_column(Enum(TaskStatus))
     
-    user_id = Column(Integer, ForeignKey('users.id'))
-    user = relationship('User', back_populates='tasks')
+    user_id: Mapped[int | None] = mapped_column(ForeignKey('users.id'))
+    user: Mapped['User'] = relationship(back_populates='tasks')
