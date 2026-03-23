@@ -10,4 +10,4 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(40))
     email: Mapped[str] = mapped_column(String(60), unique = True)
     
-    tasks: Mapped['Task'] = relationship(back_populates = 'user')
+    tasks: Mapped[list['Task']] = relationship(back_populates = 'user')
