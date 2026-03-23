@@ -1,12 +1,13 @@
-from sqlalchemy import Column, Integer, String
-from sqlalchemy.orm import relationship
+from __future__ import annotations
+from sqlalchemy import String
+from sqlalchemy.orm import relationship, Mapped, mapped_column
 from models.base import Base
 
 class User(Base):
     __tablename__ = 'users'
     
-    id = Column(Integer, primary_key = True)
-    name = Column(String(40), nullable = False)
-    email = Column(String(60), unique = True)
+    id: Mapped[int] = mapped_column(primary_key = True)
+    name: Mapped[str] = mapped_column(String(40))
+    email: Mapped[str] = mapped_column(String(60), unique = True)
     
-    tasks = relationship('Task', back_populates = 'user')
+    tasks: Mapped['Task'] = relationship(back_populates = 'user')
