@@ -1,4 +1,4 @@
-from pydantic import EmailStr, BaseModel, Field
+from pydantic import EmailStr, BaseModel, Field, ConfigDict
 from typing import List
 from schemas.tasks import TaskResponse
 
@@ -18,8 +18,7 @@ class UserResponse(BaseModel):
     name: str = Field(min_length=3)
     email: EmailStr
     
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes = True)
         
 class UserWithTasksResponse(UserResponse):
     tasks: List[TaskResponse]
