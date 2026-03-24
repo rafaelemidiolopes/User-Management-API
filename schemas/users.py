@@ -10,8 +10,8 @@ class UserCreate(UserBase):
     pass
 
 class UserUpdate(UserBase):
-    name: str = None
-    email: EmailStr = None
+    name: str | None = None
+    email: EmailStr | None = None
     
 class UserResponse(BaseModel):
     id: int
