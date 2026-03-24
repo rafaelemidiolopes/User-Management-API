@@ -9,14 +9,12 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     pass
 
-class UserUpdate(UserBase):
-    name: str | None = None
+class UserUpdate(BaseModel):
+    name: str | None = Field(default = None, min_length = 3)
     email: EmailStr | None = None
     
-class UserResponse(BaseModel):
+class UserResponse(UserBase):
     id: int
-    name: str = Field(min_length=3)
-    email: EmailStr
     
     model_config = ConfigDict(from_attributes = True)
         
