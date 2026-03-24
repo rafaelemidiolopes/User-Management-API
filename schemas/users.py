@@ -1,5 +1,5 @@
 from pydantic import EmailStr, BaseModel, Field
-from typing import Optional, List
+from typing import List
 from schemas.tasks import TaskResponse
 
 class UserBase(BaseModel):
@@ -10,8 +10,8 @@ class UserCreate(UserBase):
     pass
 
 class UserUpdate(UserBase):
-    name: Optional[str] = None
-    email: Optional[EmailStr] = None
+    name: str = None
+    email: EmailStr = None
     
 class UserResponse(BaseModel):
     id: int
