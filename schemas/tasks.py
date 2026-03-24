@@ -1,10 +1,9 @@
 from pydantic import BaseModel, Field
-from typing import Optional
 from models.tasks import TaskStatus
 
 class TaskBase(BaseModel):
     title: str = Field(min_length=3)
-    description: Optional[str]
+    description: str | None
     status: TaskStatus = TaskStatus.pending
     user_id: int = None
     
