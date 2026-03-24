@@ -20,7 +20,7 @@ class TaskResponse(BaseModel):
     id: int
     title: str
     description: str | None
-    status: str | None
+    status: TaskStatus | None
     user_id: int | None
 
     class Config:
