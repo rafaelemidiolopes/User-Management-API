@@ -1,4 +1,4 @@
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from models.tasks import TaskStatus
 
 class TaskBase(BaseModel):
@@ -23,5 +23,4 @@ class TaskResponse(BaseModel):
     status: TaskStatus | None
     user_id: int | None
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes = True)
