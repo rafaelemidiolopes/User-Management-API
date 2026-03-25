@@ -24,7 +24,7 @@ def get_tasks(db):
     return db.query(Task).options(joinedload(Task.user)).all()
 
 def get_tasks_with_user(db):
-    return db.query(Task).filter(Task.user_id is not None).options(joinedload(Task.user)).all()
+    return db.query(Task).filter(Task.user_id.isnot(None)).options(joinedload(Task.user)).all()
 
 def get_tasks_without_user(db):
     return db.query(Task).filter(Task.user_id.is_(None)).all()
