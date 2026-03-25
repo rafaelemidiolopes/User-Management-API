@@ -30,18 +30,10 @@ def get_tasks_without_user(db):
     return db.query(Task).filter(Task.user_id.is_(None)).all()
 
 def get_task(db, task_id):
-    task = db.query(Task).filter_by(id = task_id).first()
-
-    if not task:
-        raise HTTPException(status_code=404, detail='Task not found! ')
-    
-    return task
+    return get_task_or_404(db, task_id)
 
 def update_task(task_id, task_updated, db):
-    task = db.query(Task).filter_by(id = task_id).first()
-    
-    if not task:
-        raise HTTPException(status_code=404, detail='Task not found! ')
+    task = get_task_or_404(db, task_id)
     
     if task_updated.user_id is not None:
         user = db.query(User).filter_by(id = task_updated.user_id).first()
@@ -61,10 +53,15 @@ def update_task(task_id, task_updated, db):
     return task
 
 def delete_task(task_id, db):
+    task = get_task_or_404(db, task_id)
+        
+    db.delete(task)
+    db.commit()
+    
+def get_task_or_404(db, task_id):
     task = db.query(Task).filter_by(id = task_id).first()
     
     if not task:
         raise HTTPException(status_code=404, detail='Task not found! ')
-        
-    db.delete(task)
-    db.commit()
+    
+    return task
