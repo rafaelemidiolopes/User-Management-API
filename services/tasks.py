@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import joinedload
 
 def create_task(task, db):    
-    new_task = Task(title = task.title, description = task.description, user_id = task.user_id)
+    new_task = Task(title = task.title, description = task.description, status = task.status, user_id = task.user_id)
 
     if new_task.user_id is not None:
         user_exists = db.query(User).filter_by(id = task.user_id).first()
