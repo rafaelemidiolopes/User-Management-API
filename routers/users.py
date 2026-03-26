@@ -23,13 +23,13 @@ def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
     return users.get_user_tasks(user_id, db)
 
 @router.get('/users/{id_user}', response_model=UserResponse)
-def get_user(id_user: int, db: Session = Depends(get_db)):
-    return users.get_user_or_404(id_user, db)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    return users.get_user_or_404(user_id, db)
 
-@router.delete('/users/{id_user}', status_code=204)
-def delete_user(id_user: int, db: Session = Depends(get_db)):
-    users.delete_user(id_user, db)
+@router.delete('/users/{user_id}', status_code=204)
+def delete_user(user_id: int, db: Session = Depends(get_db)):
+    users.delete_user(user_id, db)
     
-@router.put('/users/{id_user}', response_model=UserResponse)
-def update_user(id_user: int, user_updated: UserUpdate, db: Session = Depends(get_db)):
-    return users.delete_user(id_user, user_updated, db)
+@router.put('/users/{user_id}', response_model=UserResponse)
+def update_user(user_id: int, user_updated: UserUpdate, db: Session = Depends(get_db)):
+    return users.delete_user(user_id, user_updated, db)
