@@ -22,7 +22,7 @@ def get_users_with_tasks(db: Session = Depends(get_db)):
 def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
     return users.get_user_tasks(user_id, db)
 
-@router.get('/users/{id_user}', response_model=UserResponse)
+@router.get('/users/{user_id}', response_model=UserResponse)
 def get_user(user_id: int, db: Session = Depends(get_db)):
     return users.get_user_or_404(user_id, db)
 
