@@ -1,11 +1,8 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session, joinedload
-from typing import List
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 from schemas.tasks import TaskResponse, TaskUpdate, TaskCreate
 from database import get_db
-from models.tasks import Task
-from models.users import User
-from services import users, tasks
+from services import tasks
 
 router = APIRouter()
 
@@ -13,15 +10,15 @@ router = APIRouter()
 def create_task(task: TaskCreate, db: Session = Depends(get_db)):
     return tasks.create_task(task, db)
 
-@router.get('/tasks', response_model=List[TaskResponse])
+@router.get('/tasks', response_model=list[TaskResponse])
 def get_tasks(db: Session = Depends(get_db)):
     return tasks.get_tasks(db)
     
-@router.get('/tasks/tasks-with-user', response_model=List[TaskResponse])
+@router.get('/tasks/tasks-with-user', response_model=list[TaskResponse])
 def get_tasks_with_user(db: Session = Depends(get_db)):
     return tasks.get_tasks_with_user(db)
 
-@router.get('/tasks/tasks-without-user', response_model=List[TaskResponse])
+@router.get('/tasks/tasks-without-user', response_model=list[TaskResponse])
 def get_tasks_without_user(db: Session = Depends(get_db)):
     return tasks.get_tasks_without_user(db)
 
