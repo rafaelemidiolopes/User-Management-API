@@ -26,7 +26,7 @@ def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
 
 @router.get('/users/{id_user}', status_code=200, response_model=UserResponse)
 def get_user(id_user: int, db: Session = Depends(get_db)):
-    return users.get_user(id_user, db)
+    return users.get_user_or_404(id_user, db)
 
 @router.delete('/users/{id_user}', status_code=204)
 def delete_user(id_user: int, db: Session = Depends(get_db)):

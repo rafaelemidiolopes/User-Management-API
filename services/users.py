@@ -32,11 +32,6 @@ def get_user_tasks(user_id, db):
     
     return user_tasks
 
-def get_user(id_user, db):
-    user_exists = get_user_or_404(id_user, db)
-    
-    return user_exists
-
 def delete_user(id_user, db):
     user = get_user_or_404(id_user, db)
     
