@@ -29,7 +29,7 @@ def get_user_tasks(user_id: int, db: Session) -> User:
     user_with_tasks = db.query(User).filter_by(id = user_id).options(joinedload(User.tasks)).first()
     
     if not user_with_tasks:
-        raise HTTPException(status_code=404, detail='Id not exists!')
+        raise HTTPException(status_code=404, detail='User not found!')
     
     return user_with_tasks
 
@@ -63,6 +63,6 @@ def get_user_or_404(user_id: int, db: Session) -> User:
     user = db.query(User).filter_by(id = user_id).first()
     
     if not user:
-        raise HTTPException(status_code=404, detail='Id not exists!')
+        raise HTTPException(status_code=404, detail='User not found!')
     
     return user
