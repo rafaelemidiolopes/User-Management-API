@@ -52,8 +52,10 @@ def update_user(id_user, user_updated, db):
     if email_existing and email_existing.id != id_user:
         raise HTTPException(status_code=409, detail='Email already registered!')
     
-    get_user.name = user_updated.name
-    get_user.email = user_updated.email
+    dict_user_updated = user_updated.model_dump(exclude_unset = True)
+    
+    for field, value in dict_user_updated.items():
+        setattr(get_user, field, value)
     
     db.commit()
     
