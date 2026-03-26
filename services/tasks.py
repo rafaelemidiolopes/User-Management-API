@@ -4,7 +4,7 @@ from fastapi import HTTPException
 from sqlalchemy.orm import joinedload, Session
 from schemas.tasks import TaskUpdate, TaskCreate
 
-def create_task(task: TaskCreate, db: Session):    
+def create_task(task: TaskCreate, db: Session) -> Task:    
     new_task = Task(title = task.title, description = task.description, status = task.status, user_id = task.user_id)
 
     if new_task.user_id is not None:
@@ -21,16 +21,16 @@ def create_task(task: TaskCreate, db: Session):
     
     return new_task
 
-def get_tasks(db: Session):
+def get_tasks(db: Session) -> list[Task]:
     return db.query(Task).options(joinedload(Task.user)).all()
 
-def get_tasks_with_user(db: Session):
+def get_tasks_with_user(db: Session) -> list[Task]:
     return db.query(Task).filter(Task.user_id.isnot(None)).options(joinedload(Task.user)).all()
 
-def get_tasks_without_user(db: Session):
+def get_tasks_without_user(db: Session) -> list[Task]:
     return db.query(Task).filter(Task.user_id.is_(None)).all()
 
-def update_task(task_id: int, task_updated: TaskUpdate, db: Session):
+def update_task(task_id: int, task_updated: TaskUpdate, db: Session) -> Task:
     task = get_task_or_404(task_id, db)
     
     if task_updated.user_id is not None:
@@ -50,13 +50,13 @@ def update_task(task_id: int, task_updated: TaskUpdate, db: Session):
     
     return task
 
-def delete_task(task_id: int, db: Session):
+def delete_task(task_id: int, db: Session) -> None:
     task = get_task_or_404(task_id, db)
         
     db.delete(task)
     db.commit()
     
-def get_task_or_404(task_id: int, db: Session):
+def get_task_or_404(task_id: int, db: Session) -> Task:
     task = db.query(Task).filter_by(id = task_id).first()
     
     if not task:
