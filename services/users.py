@@ -36,7 +36,7 @@ def get_user_tasks(user_id: int, db: Session) -> User:
 def delete_user(user_id: int, db: Session) -> None:
     user = get_user_or_404(user_id, db)
     
-    db.query(User).filter_by(id = user_id).delete()
+    db.delete(user)
     
     db.commit()
     
