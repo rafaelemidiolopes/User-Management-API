@@ -10,11 +10,11 @@ router = APIRouter()
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return users.create_user(user, db)
     
-@router.get('/users', status_code=200, response_model=list[UserResponse])
+@router.get('/users', response_model=list[UserResponse])
 def get_users(db: Session = Depends(get_db)):
     return users.get_users(db)
     
-@router.get('/users/users-with-tasks', status_code=200, response_model=list[UserWithTasksResponse])
+@router.get('/users/users-with-tasks', response_model=list[UserWithTasksResponse])
 def get_users_with_tasks(db: Session = Depends(get_db)):
     return users.get_users_with_tasks(db)
 
@@ -22,7 +22,7 @@ def get_users_with_tasks(db: Session = Depends(get_db)):
 def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
     return users.get_user_tasks(user_id, db)
 
-@router.get('/users/{id_user}', status_code=200, response_model=UserResponse)
+@router.get('/users/{id_user}', response_model=UserResponse)
 def get_user(id_user: int, db: Session = Depends(get_db)):
     return users.get_user_or_404(id_user, db)
 
@@ -30,6 +30,6 @@ def get_user(id_user: int, db: Session = Depends(get_db)):
 def delete_user(id_user: int, db: Session = Depends(get_db)):
     users.delete_user(id_user, db)
     
-@router.put('/users/{id_user}', status_code=200, response_model=UserResponse)
+@router.put('/users/{id_user}', response_model=UserResponse)
 def update_user(id_user: int, user_updated: UserUpdate, db: Session = Depends(get_db)):
     return users.delete_user(id_user, user_updated, db)
