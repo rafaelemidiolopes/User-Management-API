@@ -27,7 +27,7 @@ def get_tasks_without_user(db: Session = Depends(get_db)):
 
 @router.get('/tasks/{task_id}', response_model=TaskResponse)
 def get_task(task_id: int, db: Session = Depends(get_db)):
-    return tasks.get_task(db, task_id)
+    return tasks.get_task_or_404(db, task_id)
 
 @router.put('/tasks/{task_id}', response_model=TaskResponse)
 def update_task(task_id: int, task_updated: TaskUpdate, db: Session = Depends(get_db)):

@@ -29,9 +29,6 @@ def get_tasks_with_user(db):
 def get_tasks_without_user(db):
     return db.query(Task).filter(Task.user_id.is_(None)).all()
 
-def get_task(db, task_id):
-    return get_task_or_404(db, task_id)
-
 def update_task(task_id, task_updated, db):
     task = get_task_or_404(db, task_id)
     
