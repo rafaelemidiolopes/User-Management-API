@@ -1,9 +1,7 @@
-from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session, selectinload, joinedload
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
 from schemas.users import UserResponse, UserCreate, UserUpdate, UserWithTasksResponse
 from database import get_db
-from models.users import User
-from typing import List
 from services import users
 
 router = APIRouter()
@@ -12,11 +10,11 @@ router = APIRouter()
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return users.create_user(user, db)
     
-@router.get('/users', status_code=200, response_model=List[UserResponse])
+@router.get('/users', status_code=200, response_model=list[UserResponse])
 def get_users(db: Session = Depends(get_db)):
     return users.get_users(db)
     
-@router.get('/users/users-with-tasks', status_code=200, response_model=List[UserWithTasksResponse])
+@router.get('/users/users-with-tasks', status_code=200, response_model=list[UserWithTasksResponse])
 def get_users_with_tasks(db: Session = Depends(get_db)):
     return users.get_users_with_tasks(db)
 
