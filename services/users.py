@@ -1,8 +1,9 @@
 from fastapi import HTTPException
 from models.users import User
-from sqlalchemy.orm import selectinload, joinedload
+from sqlalchemy.orm import selectinload, joinedload, Session
+from schemas.users import UserCreate, UserUpdate
 
-def create_user(user, db):
+def create_user(user: UserCreate, db: Session) -> User:
     email_existing = db.query(User).filter_by(email = user.email).first()
     
     if email_existing:
@@ -18,13 +19,13 @@ def create_user(user, db):
     
     return new_user
 
-def get_users(db):
+def get_users(db: Session) -> list[User]:
     return db.query(User).all()
 
-def get_users_with_tasks(db):
+def get_users_with_tasks(db: Session) -> list[User]:
     return db.query(User).filter(User.tasks.any()).options(selectinload(User.tasks)).all()
 
-def get_user_tasks(user_id, db):
+def get_user_tasks(user_id: int, db: Session) -> User:
     user_with_tasks = db.query(User).filter_by(id = user_id).options(joinedload(User.tasks)).first()
     
     if not user_with_tasks:
@@ -32,14 +33,14 @@ def get_user_tasks(user_id, db):
     
     return user_with_tasks
 
-def delete_user(user_id, db):
+def delete_user(user_id: int, db: Session) -> None:
     user = get_user_or_404(user_id, db)
     
     db.query(User).filter_by(id = user_id).delete()
     
     db.commit()
     
-def update_user(user_id, user_updated, db):
+def update_user(user_id: int, user_updated: UserUpdate, db: Session) -> User:
     user = get_user_or_404(user_id, db)
     
     email_existing = db.query(User).filter_by(email = user_updated.email).first()
@@ -58,7 +59,7 @@ def update_user(user_id, user_updated, db):
     
     return user
 
-def get_user_or_404(user_id, db):
+def get_user_or_404(user_id: int, db: Session) -> User:
     user = db.query(User).filter_by(id = user_id).first()
     
     if not user:
