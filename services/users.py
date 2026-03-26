@@ -33,28 +33,19 @@ def get_user_tasks(user_id, db):
     return user_tasks
 
 def get_user(id_user, db):
-    user_exists = db.query(User).filter_by(id = id_user).first()
-    
-    if not user_exists:
-        raise HTTPException(status_code=404, detail='Id not exists!')
+    user_exists = get_user_or_404(id_user, db)
     
     return user_exists
 
 def delete_user(id_user, db):
-    user_exists = db.query(User).filter_by(id = id_user).first()
-    
-    if not user_exists:
-        raise HTTPException(status_code=404, detail='Id not exists!')
+    user = get_user_or_404(id_user, db)
     
     db.query(User).filter_by(id = id_user).delete()
     
     db.commit()
     
 def update_user(id_user, user_updated, db):
-    get_user = db.query(User).filter_by(id = id_user).first()
-    
-    if not get_user:
-        raise HTTPException(status_code=404, detail='Id not exists!')
+    get_user = get_user_or_404(id_user, db)
     
     email_existing = db.query(User).filter_by(email = user_updated.email).first()
     
@@ -69,3 +60,11 @@ def update_user(id_user, user_updated, db):
     db.refresh(get_user)
     
     return get_user
+
+def get_user_or_404(user_id, db):
+    user = db.query(User).filter_by(id = user_id).first()
+    
+    if not user:
+        raise HTTPException(status_code=404, detail='Id not exists!')
+    
+    return user
