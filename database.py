@@ -1,7 +1,11 @@
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from dotenv import load_dotenv
+import os
 
-DATABASE_URL = 'mysql+pymysql://root:12345r@localhost:3306/user_management_api'
+load_dotenv()
+
+DATABASE_URL = f'mysql+pymysql://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@{os.getenv('DB_HOST')}/{os.getenv('DB_NAME')}'
 
 engine = create_engine(DATABASE_URL)
 
