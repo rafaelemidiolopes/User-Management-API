@@ -57,18 +57,21 @@ This project follows a clean architecture approach, separating concerns between 
 ```bash
 git clone https://github.com/your-username/user-management-api.git
 cd user-management-api
+
 2. Create and activate virtual environment
 python -m venv venv
 Linux / macOS
 source venv/bin/activate
 Windows
 venv\Scripts\activate
+
 3. Install dependencies
 pip install -r requirements.txt
 
 If you don't have a requirements file:
 
 pip freeze > requirements.txt
+
 4. Configure environment variables
 
 Create a .env file in the root:
@@ -83,7 +86,9 @@ uvicorn main:app --reload
 Base URL: http://127.0.0.1:8000
 Swagger Docs: http://127.0.0.1:8000/docs
 ReDoc: http://127.0.0.1:8000/redoc
+
 📌 Endpoints
+
 👤 Users
 Method	Endpoint	Description
 POST	/users	Create user
@@ -93,6 +98,7 @@ PUT	/users/{user_id}	Update user
 DELETE	/users/{user_id}	Delete user
 GET	/users/users-with-tasks	Users with tasks
 GET	/users/{user_id}/tasks	Get user with tasks
+
 ✅ Tasks
 Method	Endpoint	Description
 POST	/tasks	Create task
@@ -102,6 +108,7 @@ PUT	/tasks/{task_id}	Update task
 DELETE	/tasks/{task_id}	Delete task
 GET	/tasks/tasks-with-user	Tasks with user
 GET	/tasks/tasks-without-user	Tasks without user
+
 🧠 Architecture
 
 Models → Database layer (SQLAlchemy)
@@ -116,6 +123,7 @@ No authentication (JWT not implemented)
 No pagination
 No automated tests
 No database migrations (Alembic not configured)
+
 👨‍💻 Author
 
 Rafael Emídio
