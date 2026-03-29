@@ -1,7 +1,8 @@
 from fastapi import HTTPException
 from models.users import User
 from sqlalchemy.orm import selectinload, joinedload, Session
-from schemas.users import UserCreate, UserUpdate
+from schemas.users import UserCreate, UserUpdate, UserLogin
+from services.security import verify_password, get_password_hash
 
 def create_user(user: UserCreate, db: Session) -> User:
     email_existing = db.query(User).filter_by(email = user.email).first()
@@ -9,7 +10,9 @@ def create_user(user: UserCreate, db: Session) -> User:
     if email_existing:
         raise HTTPException(status_code=409, detail='Email already registered!')
     
-    new_user = User(name = user.name, email = user.email)
+    password_hash = get_password_hash(user.password)
+    
+    new_user = User(name = user.name, email = user.email, password_hash = password_hash)
     
     db.add(new_user)
     
