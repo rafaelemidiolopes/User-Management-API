@@ -10,7 +10,7 @@ router = APIRouter()
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return users.create_user(user, db)
     
-@router.post('/login')    
+@router.post('/login', response_model=UserResponse)    
 def login(data: UserLogin, db: Session = Depends(get_db)):
     return users.login(data, db)    
     

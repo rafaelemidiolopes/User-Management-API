@@ -69,3 +69,14 @@ def get_user_or_404(user_id: int, db: Session) -> User:
         raise HTTPException(status_code=404, detail='User not found!')
     
     return user
+
+def login(data: UserLogin, db: Session) -> User:
+    user = db.query(User).filter_by(email = data.email).first()
+    
+    if not user:
+        raise HTTPException(status_code = 401, detail = 'Email not found! ')
+    
+    if not verify_password(data.password, user.password_hash):
+        raise HTTPException(status_code = 401, detail = 'Invalid credentials! ')
+    
+    return user
