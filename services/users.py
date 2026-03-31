@@ -1,8 +1,8 @@
 from fastapi import HTTPException
 from models.users import User
 from sqlalchemy.orm import selectinload, joinedload, Session
-from schemas.users import UserCreate, UserUpdate, UserLogin
-from services.security import verify_password, get_password_hash
+from schemas.users import UserCreate, UserUpdate, UserLogin, Token
+from services.security import verify_password, get_password_hash, create_token
 
 def create_user(user: UserCreate, db: Session) -> User:
     email_existing = db.query(User).filter_by(email = user.email).first()
@@ -70,7 +70,7 @@ def get_user_or_404(user_id: int, db: Session) -> User:
     
     return user
 
-def login(data: UserLogin, db: Session) -> User:
+def login(data: UserLogin, db: Session) -> Token:
     user = db.query(User).filter_by(email = data.email).first()
     
     if not user:
@@ -79,4 +79,6 @@ def login(data: UserLogin, db: Session) -> User:
     if not verify_password(data.password, user.password_hash):
         raise HTTPException(status_code = 401, detail = 'Invalid credentials! ')
     
-    return user
+    token = create_token(data)
+    
+    return Token(access_token=token, token_type='bearer')
