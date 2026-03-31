@@ -79,6 +79,6 @@ def login(data: UserLogin, db: Session) -> Token:
     if not verify_password(data.password, user.password_hash):
         raise HTTPException(status_code = 401, detail = 'Invalid credentials! ')
     
-    token = create_token(data)
+    token = create_token({'sub': str(user.id)})
     
     return Token(access_token=token, token_type='bearer')
