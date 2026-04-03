@@ -4,7 +4,7 @@ from http import HTTPStatus
 from fastapi import Depends, HTTPException
 from fastapi.security import OAuth2PasswordBearer
 from zoneinfo import ZoneInfo
-from jwt import encode, decode, DecodeError
+from jwt import encode, decode, DecodeError, ExpiredSignatureError
 from sqlalchemy import select
 from database import get_db
 from sqlalchemy.orm import Session
@@ -42,8 +42,7 @@ def get_current_user(
     credentials_exception = HTTPException(
         status_code=HTTPStatus.UNAUTHORIZED,
         detail='Could not validate credentials',
-        headers={'WWW-Authenticate': 'Bearer'},
-    )
+        headers={'WWW-Authenticate': 'Bearer'})
 
     try:
         payload = decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -51,10 +50,18 @@ def get_current_user(
 
         if not user_email:
             raise credentials_exception
+        
+    except ExpiredSignatureError:
+        raise HTTPException(status_code=HTTPStatus.UNAUTHORIZED,
+            detail='Token expired',
+            headers={'WWW-Authenticate': 'Bearer'})
 
     except DecodeError:
         raise credentials_exception
 
+    except Exception:
+        raise credentials_exception
+        
     user = session.scalar(
         select(User).where(User.email == user_email)
     )
