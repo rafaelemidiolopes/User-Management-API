@@ -46,9 +46,9 @@ def get_current_user(
 
     try:
         payload = decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        user_email = payload.get('sub')
+        user_id = payload.get('sub')
 
-        if not user_email:
+        if not user_id:
             raise credentials_exception
         
     except ExpiredSignatureError:
@@ -63,7 +63,7 @@ def get_current_user(
         raise credentials_exception
         
     user = session.scalar(
-        select(User).where(User.email == user_email)
+        select(User).where(User.id == user_id)
     )
 
     if not user:
