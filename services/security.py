@@ -32,7 +32,7 @@ def create_token(data: dict):
     
     return encoded_jwt
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='token')
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
 
 def get_current_user(
@@ -47,6 +47,7 @@ def get_current_user(
     try:
         payload = decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         user_id = payload.get('sub')
+        user_id = int(user_id)
 
         if not user_id:
             raise credentials_exception
