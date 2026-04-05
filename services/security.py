@@ -36,7 +36,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
 
 
 def get_current_user(
-    session: Session = Depends(get_db),
+    db: Session = Depends(get_db),
     token: str = Depends(oauth2_scheme),
 ):
     credentials_exception = HTTPException(
@@ -63,7 +63,7 @@ def get_current_user(
     except Exception:
         raise credentials_exception
         
-    user = session.scalar(
+    user = db.scalar(
         select(User).where(User.id == user_id)
     )
 
