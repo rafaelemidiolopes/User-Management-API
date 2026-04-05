@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from schemas.users import UserResponse, UserCreate, UserUpdate, UserWithTasksResponse, UserLogin, Token
 from database import get_db
 from services import users
+from services.security import get_current_user
 
 router = APIRouter()
 
@@ -27,7 +28,7 @@ def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
     return users.get_user_tasks(user_id, db)
 
 @router.get('/users/{user_id}', response_model=UserResponse)
-def get_user(user_id: int, db: Session = Depends(get_db)):
+def get_user(user_id: int, db: Session = Depends(get_db), current_user = Depends(get_current_user)):
     return users.get_user_or_404(user_id, db)
 
 @router.delete('/users/{user_id}', status_code=204)
