@@ -24,12 +24,6 @@ def create_task(task: TaskCreate, db: Session) -> Task:
 def get_tasks(db: Session) -> list[Task]:
     return db.query(Task).options(joinedload(Task.user)).all()
 
-def get_tasks_with_user(db: Session) -> list[Task]:
-    return db.query(Task).filter(Task.user_id.isnot(None)).options(joinedload(Task.user)).all()
-
-def get_tasks_without_user(db: Session) -> list[Task]:
-    return db.query(Task).filter(Task.user_id.is_(None)).all()
-
 def update_task(task_id: int, task_updated: TaskUpdate, db: Session) -> Task:
     task = get_task_or_404(task_id, db)
     
