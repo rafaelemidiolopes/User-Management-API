@@ -38,9 +38,9 @@ def get_user(user_id: int, db: Session = Depends(get_db), current_user: User = D
     return users.get_user_or_404(user_id, db)
 
 @router.delete('/users/{user_id}', status_code=204)
-def delete_user(user_id: int, db: Session = Depends(get_db)):
-    users.delete_user(user_id, db)
+def delete_user(user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    users.delete_user(user_id, current_user, db)
     
 @router.put('/users/{user_id}', response_model=UserResponse)
-def update_user(user_id: int, user_updated: UserUpdate, db: Session = Depends(get_db)):
+def update_user(user_id: int, user_updated: UserUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.update_user(user_id, user_updated, db)

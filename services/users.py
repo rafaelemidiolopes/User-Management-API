@@ -38,7 +38,10 @@ def get_user_tasks(user_id: int, db: Session) -> User:
     
     return user_with_tasks
 
-def delete_user(user_id: int, db: Session) -> None:
+def delete_user(user_id: int, current_user: User, db: Session) -> None:
+    if user_id != current_user.id:
+        raise HTTPException(status_code=403)
+    
     user = get_user_or_404(user_id, db)
     
     db.delete(user)
