@@ -5,6 +5,7 @@ from database import get_db
 from services import users
 from services.security import get_current_user
 from models.users import User
+from fastapi.security import OAuth2PasswordRequestForm
 
 router = APIRouter()
 
@@ -12,9 +13,9 @@ router = APIRouter()
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
     return users.create_user(user, db)
     
-@router.post('/login', response_model=Token)    
-def login(data: UserLogin, db: Session = Depends(get_db)):
-    return users.login(data, db)    
+@router.post('/login', response_model=Token) 
+def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)): 
+    return users.login(form_data, db) 
     
 @router.get('/users', response_model=list[UserResponse])
 def get_users(db: Session = Depends(get_db)):

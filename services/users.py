@@ -4,6 +4,7 @@ from sqlalchemy.orm import selectinload, joinedload, Session
 from schemas.users import UserCreate, UserUpdate, UserLogin, Token
 from sqlalchemy import select
 from services.security import verify_password, get_password_hash, create_token
+from fastapi.security import OAuth2PasswordRequestForm
 
 def create_user(user: UserCreate, db: Session) -> User:
     email_existing = db.scalar(select(User).where(User.email == user.email))
@@ -71,15 +72,15 @@ def get_user_or_404(user_id: int, db: Session) -> User:
     
     return user
 
-def login(data: UserLogin, db: Session) -> Token:
-    user = db.query(User).filter_by(email = data.email).first()
+def login(form_data: OAuth2PasswordRequestForm, db: Session) -> Token: 
+    user = db.query(User).filter_by(email = form_data.username).first() 
     
-    if not user:
-        raise HTTPException(status_code = 401, detail = 'Email not found! ')
+    if not user: 
+        raise HTTPException(status_code = 401, detail = 'Invalid credentials! ') 
     
-    if not verify_password(data.password, user.password_hash):
-        raise HTTPException(status_code = 401, detail = 'Invalid credentials! ')
+    if not verify_password(form_data.password, user.password_hash): 
+        raise HTTPException(status_code = 401, detail = 'Invalid credentials! ') 
     
-    token = create_token({'sub': str(user.id)})
+    token = create_token({'sub': str(user.id)}) 
     
     return Token(access_token=token, token_type='bearer')
