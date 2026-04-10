@@ -1,9 +1,9 @@
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
 from models.users import User
 from sqlalchemy.orm import selectinload, joinedload, Session
 from schemas.users import UserCreate, UserUpdate, UserLogin, Token
 from sqlalchemy import select
-from services.security import verify_password, get_password_hash, create_token
+from services.security import verify_password, get_password_hash, create_token, get_current_admin
 from fastapi.security import OAuth2PasswordRequestForm
 
 def create_user(user: UserCreate, db: Session) -> User:
@@ -86,3 +86,17 @@ def login(form_data: OAuth2PasswordRequestForm, db: Session) -> Token:
     token = create_token({'sub': str(user.id)}) 
     
     return Token(access_token=token, token_type='bearer')
+
+def promote_to_admin(user_id: int, db: Session):
+    user = get_user_or_404(user_id, db)
+    
+    if user.is_admin:
+        raise HTTPException(status_code = 400, detail='User is already an administrator')
+    
+    user.is_admin = True
+    
+    db.commit()
+    
+    db.refresh(user)
+    
+    return user

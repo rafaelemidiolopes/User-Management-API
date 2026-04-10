@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from schemas.users import UserResponse, UserCreate, UserUpdate, UserWithTasksResponse, UserLogin, Token
+from schemas.users import UserResponse, UserCreate, UserUpdate, UserWithTasksResponse, Token
 from database import get_db
 from services import users
-from services.security import get_current_user
+from services.security import get_current_user, get_current_admin
 from models.users import User
 from fastapi.security import OAuth2PasswordRequestForm
 
@@ -28,6 +28,10 @@ def get_users(current_user: User = Depends(get_current_user), db: Session = Depe
 @router.get('/users/users-with-tasks', response_model=list[UserWithTasksResponse])
 def get_users_with_tasks(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.get_users_with_tasks(db)
+
+@router.patch('/users/{user_id}/promote', response_model=UserResponse)
+def promote_to_admin(user_id: int, current_admin: User = Depends(get_current_admin), db: Session = Depends(get_db)):
+    return users.promote_to_admin(user_id, db)
 
 @router.get('/users/{user_id}/tasks', response_model=UserWithTasksResponse)
 def get_user_tasks(user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
