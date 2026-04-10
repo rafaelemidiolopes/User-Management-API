@@ -41,6 +41,6 @@ def get_user(user_id: int, db: Session = Depends(get_db), current_user: User = D
 def delete_user(user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     users.delete_user(user_id, current_user, db)
     
-@router.put('/users/{user_id}', response_model=UserResponse)
-def update_user(user_id: int, user_updated: UserUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return users.update_user(user_id, user_updated, db)
+@router.put('/me', response_model=UserResponse)
+def update_me(user_updated: UserUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return users.update_me(current_user, user_updated, db)

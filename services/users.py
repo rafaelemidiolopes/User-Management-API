@@ -48,24 +48,23 @@ def delete_user(user_id: int, current_user: User, db: Session) -> None:
     
     db.commit()
     
-def update_user(user_id: int, user_updated: UserUpdate, db: Session) -> User:
-    user = get_user_or_404(user_id, db)
+def update_me(current_user: User, user_updated: UserUpdate, db: Session) -> User:
+    if user_updated.email:
+        user = db.query(User).filter_by(email = user_updated.email).first()
     
-    email_existing = db.query(User).filter_by(email = user_updated.email).first()
-    
-    if email_existing and email_existing.id != user_id:
-        raise HTTPException(status_code=409, detail='Email already registered!')
+        if user and user.id != current_user.id:
+            raise HTTPException(status_code=409, detail='Email already registered!')
     
     dict_user_updated = user_updated.model_dump(exclude_unset = True)
     
     for field, value in dict_user_updated.items():
-        setattr(user, field, value)
+        setattr(current_user, field, value)
     
     db.commit()
     
-    db.refresh(user)
+    db.refresh(current_user)
     
-    return user
+    return current_user
 
 def get_user_or_404(user_id: int, db: Session) -> User:
     user = db.query(User).filter_by(id = user_id).first()
