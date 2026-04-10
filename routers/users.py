@@ -17,6 +17,10 @@ def create_user(user: UserCreate, db: Session = Depends(get_db)):
 def login(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)): 
     return users.login(form_data, db) 
     
+@router.get('/me', response_model = UserResponse)
+def get_me(current_user: User = Depends(get_current_user)):
+    return current_user    
+    
 @router.get('/users', response_model=list[UserResponse])
 def get_users(db: Session = Depends(get_db)):
     return users.get_users(db)
