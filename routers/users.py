@@ -22,19 +22,19 @@ def get_me(current_user: User = Depends(get_current_user)):
     return current_user    
     
 @router.get('/users', response_model=list[UserResponse])
-def get_users(db: Session = Depends(get_db)):
+def get_users(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.get_users(db)
     
 @router.get('/users/users-with-tasks', response_model=list[UserWithTasksResponse])
-def get_users_with_tasks(db: Session = Depends(get_db)):
+def get_users_with_tasks(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.get_users_with_tasks(db)
 
 @router.get('/users/{user_id}/tasks', response_model=UserWithTasksResponse)
-def get_user_tasks(user_id: int, db: Session = Depends(get_db)):
+def get_user_tasks(user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.get_user_tasks(user_id, db)
 
 @router.get('/users/{user_id}', response_model=UserResponse)
-def get_user(user_id: int, db: Session = Depends(get_db), current_user: User = Depends(get_current_user)):
+def get_user(user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.get_user_or_404(user_id, db)
 
 @router.delete('/users/{user_id}', status_code=204)
