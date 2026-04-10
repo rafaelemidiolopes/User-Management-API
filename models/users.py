@@ -10,5 +10,6 @@ class User(Base):
     name: Mapped[str] = mapped_column(String(40))
     email: Mapped[str] = mapped_column(String(60), unique = True)
     password_hash: Mapped[str] = mapped_column(String(255))
+    is_admin: Mapped[bool] = mapped_column(bool, nullable = False, default = False) 
     
     tasks: Mapped[list['Task']] = relationship(back_populates = 'user')
