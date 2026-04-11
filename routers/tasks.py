@@ -20,7 +20,7 @@ def get_tasks(current_admin: User = Depends(get_current_admin), db: Session = De
 def get_task(task_id: int, current_admin: User = Depends(get_current_admin), db: Session = Depends(get_db)):
     return tasks.get_task_or_404(task_id, db)
 
-@router.put('/tasks/{task_id}', response_model=TaskResponse)
+@router.patch('/tasks/{task_id}', response_model=TaskResponse)
 def update_task(task_id: int, task_updated: TaskUpdate, current_admin: User = Depends(get_current_admin), db: Session = Depends(get_db)):
     return tasks.update_task(task_id, task_updated, db)
 
