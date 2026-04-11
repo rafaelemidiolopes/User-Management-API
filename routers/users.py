@@ -29,6 +29,10 @@ def get_users(current_user: User = Depends(get_current_user), db: Session = Depe
 def get_users_with_tasks(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.get_users_with_tasks(db)
 
+@router.put('/me', response_model=UserResponse)
+def update_me(user_updated: UserUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return users.update_me(current_user, user_updated, db)
+
 @router.patch('/users/{user_id}/promote', response_model=UserResponse)
 def promote_to_admin(user_id: int, current_admin: User = Depends(get_current_admin), db: Session = Depends(get_db)):
     return users.promote_to_admin(user_id, db)
@@ -44,7 +48,3 @@ def get_user(user_id: int, current_user: User = Depends(get_current_user), db: S
 @router.delete('/users/{user_id}', status_code=204)
 def delete_user(user_id: int, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     users.delete_user(user_id, current_user, db)
-    
-@router.put('/me', response_model=UserResponse)
-def update_me(user_updated: UserUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
-    return users.update_me(current_user, user_updated, db)
