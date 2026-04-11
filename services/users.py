@@ -98,3 +98,22 @@ def promote_to_admin(user_id: int, db: Session):
     db.refresh(user)
     
     return user
+
+def update_user(user_updated: UserUpdate, user_id: int, db: Session):
+    user = get_user_or_404(user_id, db)
+    if user_updated.email:
+        email_exists = db.query(User).filter_by(email = user_updated.email).first()
+    
+        if email_exists and email_exists.id != user.id:
+            raise HTTPException(status_code=409, detail='Email already registered!')
+    
+    dict_user_data = user_updated.model_dump(exclude_unset = True)
+    
+    for field, value in dict_user_data.items():
+        setattr(user, field, value)
+        
+    db.commit()
+    
+    db.refresh(user)
+    
+    return user

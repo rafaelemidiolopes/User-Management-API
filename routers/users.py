@@ -53,4 +53,6 @@ def get_user(user_id: int, current_admin: User = Depends(get_current_admin), db:
 def delete_user(user_id: int, current_admin: User = Depends(get_current_admin), db: Session = Depends(get_db)):
     users.delete_user(user_id, db)
     
-    
+@router.patch('/users/{user_id}', response_model=UserResponse)
+def update_user(user_updated: UserUpdate,  user_id: int, current_admin: User = Depends(get_current_admin), db: Session = Depends(get_db),):
+    return users.update_user(user_updated, user_id, db)
