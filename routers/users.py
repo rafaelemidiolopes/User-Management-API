@@ -10,7 +10,7 @@ from fastapi.security import OAuth2PasswordRequestForm
 router = APIRouter()
 
 @router.post('/users', status_code=201, response_model=UserResponse)
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
+def create_user(user: UserCreate, current_admin: User = Depends(get_current_admin), db: Session = Depends(get_db)):
     return users.create_user(user, db)
     
 @router.post('/login', response_model=Token) 
@@ -33,6 +33,10 @@ def get_users_with_tasks(current_admin: User = Depends(get_current_admin), db: S
 def update_me(user_updated: UserUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.update_me(current_user, user_updated, db)
 
+@router.delete('/me', status_code=204)
+def delete_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return users.delete_user(current_user.id, db)
+
 @router.patch('/users/{user_id}/promote', response_model=UserResponse)
 def promote_to_admin(user_id: int, current_admin: User = Depends(get_current_admin), db: Session = Depends(get_db)):
     return users.promote_to_admin(user_id, db)
@@ -48,3 +52,5 @@ def get_user(user_id: int, current_admin: User = Depends(get_current_admin), db:
 @router.delete('/users/{user_id}', status_code=204)
 def delete_user(user_id: int, current_admin: User = Depends(get_current_admin), db: Session = Depends(get_db)):
     users.delete_user(user_id, db)
+    
+    
