@@ -1,9 +1,9 @@
-from fastapi import HTTPException, Depends
+from fastapi import HTTPException
 from models.users import User
 from sqlalchemy.orm import selectinload, joinedload, Session
-from schemas.users import UserCreate, UserUpdate, UserLogin, Token
+from schemas.users import UserCreate, UserUpdate, Token
 from sqlalchemy import select
-from services.security import verify_password, get_password_hash, create_token, get_current_admin
+from services.security import verify_password, get_password_hash, create_token
 from fastapi.security import OAuth2PasswordRequestForm
 
 def create_user(user: UserCreate, db: Session) -> User:
@@ -101,6 +101,7 @@ def promote_to_admin(user_id: int, db: Session):
 
 def update_user(user_updated: UserUpdate, user_id: int, db: Session):
     user = get_user_or_404(user_id, db)
+    
     if user_updated.email:
         email_exists = db.query(User).filter_by(email = user_updated.email).first()
     
