@@ -118,3 +118,18 @@ def update_user(user_updated: UserUpdate, user_id: int, db: Session):
     db.refresh(user)
     
     return user
+
+def change_password(new_password: str, current_user: User, db: Session):    
+    if len(new_password) < 6:
+        raise HTTPException(status_code=422, detail='The new password is too short! Mininum 6 characters.')
+    
+    if verify_password(new_password, current_user.password_hash):
+        raise HTTPException(status_code=400, detail='The new password is identical to your current password')
+    
+    current_user.password_hash = get_password_hash(new_password)
+    
+    db.commit()
+    
+    db.refresh(current_user)
+    
+    return current_user

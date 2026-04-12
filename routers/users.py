@@ -33,6 +33,10 @@ def get_users_with_tasks(current_admin: User = Depends(get_current_admin), db: S
 def update_me(user_updated: UserUpdate, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.update_me(current_user, user_updated, db)
 
+@router.patch('/me/change-password', response_model=UserResponse)
+def change_password(new_password: str, current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
+    return users.change_password(new_password, current_user, db)
+
 @router.delete('/me', status_code=204)
 def delete_me(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return users.delete_user(current_user.id, db)
