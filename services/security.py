@@ -9,10 +9,14 @@ from sqlalchemy import select
 from database import get_db
 from sqlalchemy.orm import Session
 from models.users import User
+from dotenv import load_dotenv
+import os
 
 hasher = PasswordHash.recommended()
 
-SECRET_KEY = '12345'
+load_dotenv()
+
+SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = 'HS256'
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
