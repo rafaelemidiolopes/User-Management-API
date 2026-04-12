@@ -2,28 +2,43 @@
 
 ![Python](https://img.shields.io/badge/python-3.10+-blue)
 ![FastAPI](https://img.shields.io/badge/FastAPI-modern-green)
-![SQLAlchemy](https://img.shields.io/badge/ORM-SQLAlchemy-red)
-![Database](https://img.shields.io/badge/database-MySQL-orange)
-![Status](https://img.shields.io/badge/status-in%20development-yellow)
+![SQLAlchemy](https://img.shields.io/badge/ORM-SQLAlchemy%202.0-red)
+![MySQL](https://img.shields.io/badge/database-MySQL-orange)
+![Auth](https://img.shields.io/badge/auth-JWT%20%2B%20OAuth2-yellow)
+![Status](https://img.shields.io/badge/status-functional-brightgreen)
 ![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
-A RESTful API built with **FastAPI** to manage users and their tasks.
+---
 
-This project follows a clean architecture approach, separating concerns between routes, services, schemas, and database models.
+## 📖 Overview
+
+A RESTful API for managing users and tasks with authentication, authorization, and role-based access control.
+
+This project was built as a portfolio project to demonstrate backend development skills using FastAPI, focusing on real-world concepts like authentication, database relationships, and API design.
+
+---
+
+## 🌐 Live Demo
+
+- Swagger UI:  
+👉 https://user-management-api-dco3.onrender.com/docs
 
 ---
 
 ## 📌 Features
 
-- Full CRUD for Users
-- Full CRUD for Tasks
-- User ↔ Task relationship (One-to-Many)
-- Filter tasks:
-  - With assigned user
-  - Without assigned user
-- Efficient relational loading with SQLAlchemy (`joinedload`, `selectinload`)
-- Data validation using Pydantic
+- JWT Authentication with OAuth2 Password Bearer
+- Role-based Access Control (Admin vs User)
+- User Management:
+  - Create users (admin only)
+  - Update profile (own user)
+  - Change password with validation
+  - Promote users to admin
+- Task Management (admin only)
+- One-to-Many relationship (User → Tasks)
+- Data validation with Pydantic v2
 - Proper HTTP status codes and error handling
+- Environment-based configuration
 
 ---
 
@@ -32,7 +47,9 @@ This project follows a clean architecture approach, separating concerns between 
 - Python 3.10+
 - FastAPI
 - SQLAlchemy 2.0
-- Pydantic
+- Pydantic v2
+- PyJWT
+- pwdlib (password hashing)
 - MySQL
 - PyMySQL
 - python-dotenv
@@ -40,17 +57,27 @@ This project follows a clean architecture approach, separating concerns between 
 ---
 
 ## 📂 Project Structure
-
 ```
+
 .
-├── models/        # Database models (SQLAlchemy)
-├── schemas/       # Data validation (Pydantic)
-├── services/      # Business logic
-├── routers/       # API routes
-├── database.py    # Database connection
-├── main.py        # Application entry point
-├── .env           # Environment variables
+├── models/                 # Database models (SQLAlchemy)
+│   ├── users.py
+│   └── tasks.py
+├── schemas/                # Data validation (Pydantic)
+│   ├── users.py
+│   └── tasks.py
+├── services/               # Business logic
+│   ├── users.py
+│   ├── tasks.py
+│   └── security.py         # Auth & password handling
+├── routers/                # API routes
+│   ├── users.py
+│   └── tasks.py
+├── database.py             # Database connection & session
+├── main.py                 # Application entry point
+├── .env
 └── .gitignore
+
 ```
 
 ---
@@ -59,14 +86,13 @@ This project follows a clean architecture approach, separating concerns between 
 
 ### 1. Clone the repository
 
-```
+```bash
 git clone https://github.com/your-username/user-management-api.git
 cd user-management-api
-```
 
-### 2. Create and activate virtual environment
-
-```
+2. Create virtual environment
+bash
+Copy
 python -m venv venv
 
 # Linux / macOS
@@ -74,101 +100,94 @@ source venv/bin/activate
 
 # Windows
 venv\Scripts\activate
-```
 
-### 3. Install dependencies
-
-```
+3. Install dependencies
+bash
+Copy
 pip install -r requirements.txt
-```
 
-If you don't have a requirements file:
-
-```
-pip freeze > requirements.txt
-```
-
-### 4. Configure environment variables
-
-Create a `.env` file in the root:
-
-```
+4. Configure environment variables
+Create a .env file:
+env
+Copy
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=yourpassword
 DB_NAME=user_management_api
-```
+SECRET_KEY=your-super-secret-key
 
-### 5. Run the application
-
-```
+5. Run the application
+bash
+Copy
 uvicorn main:app --reload
-```
 
----
+🔐 Authentication
+This API uses JWT tokens with OAuth2 Password Bearer flow.
+Get token
+bash
+Copy
+POST /login
+Body:
+plain
+Copy
+username=user@example.com
+password=yourpassword
+Use token
+plain
+Copy
+Authorization: Bearer <your_token>
 
-## 🌐 API Access
+👉 Full documentation available at:
+https://user-management-api-dco3.onrender.com/docs
 
-- **Base URL:** http://127.0.0.1:8000
-- **Swagger Docs:** http://127.0.0.1:8000/docs
-- **ReDoc:** http://127.0.0.1:8000/redoc
+📌 Main Endpoints
+Public
+POST /login
+Authenticated (User)
+GET /me
+PATCH /me
+PATCH /me/change-password
+DELETE /me
 
----
+Admin Only
+POST /users
+GET /users
+PATCH /users/{id}
+DELETE /users/{id}
+PATCH /users/{id}/promote
+POST /tasks
+GET /tasks
+PATCH /tasks/{id}
+DELETE /tasks/{id}
 
-## 📌 Endpoints
+🧠 Architecture
+The project follows a layered structure:
+Models → database structure
+Schemas → validation & serialization
+Services → business logic
+Security → authentication & authorization
+Routers → HTTP layer
+This separation improves:
+maintainability
+readability
+scalability
 
-### 👤 Users
+🎯 Purpose
+This project was built to practice and demonstrate:
+Authentication & Authorization (JWT)
+API design
+Database relationships
+Backend architecture
+Real-world deployment
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/users` | Create user |
-| GET | `/users` | List users |
-| GET | `/users/{user_id}` | Get user |
-| PUT | `/users/{user_id}` | Update user |
-| DELETE | `/users/{user_id}` | Delete user |
-| GET | `/users/users-with-tasks` | Users with tasks |
-| GET | `/users/{user_id}/tasks` | Get user with tasks |
+⚠️ Limitations
+No pagination on list endpoints
+No automated tests
+No database migrations
+No rate limiting
 
-### ✅ Tasks
-
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/tasks` | Create task |
-| GET | `/tasks` | List tasks |
-| GET | `/tasks/{task_id}` | Get task |
-| PUT | `/tasks/{task_id}` | Update task |
-| DELETE | `/tasks/{task_id}` | Delete task |
-| GET | `/tasks/tasks-with-user` | Tasks with user |
-| GET | `/tasks/tasks-without-user` | Tasks without user |
-
----
-
-## 🧠 Architecture
-
-- **Models** → Database layer (SQLAlchemy)
-- **Schemas** → Data validation and serialization (Pydantic)
-- **Services** → Business logic
-- **Routers** → HTTP layer (FastAPI)
-
-This separation improves scalability, readability, and maintainability.
-
----
-
-## ⚠️ Limitations
-
-- No authentication (JWT not implemented)
-- No pagination
-- No automated tests
-- No database migrations (Alembic not configured)
-
----
-
-## 👨‍💻 Author
-
+👨‍💻 Author
 Rafael Emídio
 
----
-
-## 📄 License
-
-This project is licensed under the MIT License.
+📄 License
+MIT License
