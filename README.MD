@@ -1,12 +1,12 @@
 # 🚀 User Management API
 
-![Python](https://img.shields.io/badge/python-3.10+-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-modern-green)
-![SQLAlchemy](https://img.shields.io/badge/ORM-SQLAlchemy%202.0-red)
-![MySQL](https://img.shields.io/badge/database-MySQL-orange)
-![Auth](https://img.shields.io/badge/auth-JWT%20%2B%20OAuth2-yellow)
-![Status](https://img.shields.io/badge/status-functional-brightgreen)
-![License](https://img.shields.io/badge/license-MIT-lightgrey)
+![Python](https://img.shields.io/badge/python-3.10+-blue )
+![FastAPI](https://img.shields.io/badge/FastAPI-modern-green )
+![SQLAlchemy](https://img.shields.io/badge/ORM-SQLAlchemy%202.0-red )
+![MySQL](https://img.shields.io/badge/database-MySQL-orange )
+![Auth](https://img.shields.io/badge/auth-JWT%20%2B%20OAuth2-yellow )
+![Status](https://img.shields.io/badge/status-functional-brightgreen )
+![License](https://img.shields.io/badge/license-MIT-lightgrey )
 
 ---
 
