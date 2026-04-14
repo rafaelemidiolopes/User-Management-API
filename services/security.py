@@ -14,6 +14,8 @@ import os
 
 hasher = PasswordHash.recommended()
 
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
+
 load_dotenv()
 
 SECRET_KEY = os.getenv('SECRET_KEY')
@@ -34,11 +36,7 @@ def create_token(data: dict):
     
     encoded_jwt = encode(to_encode, SECRET_KEY, algorithm = ALGORITHM)
     
-    
     return encoded_jwt
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='login')
-
 
 def get_current_user(
     db: Session = Depends(get_db),
