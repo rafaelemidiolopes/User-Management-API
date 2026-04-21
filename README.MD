@@ -21,7 +21,7 @@ This project was built as a portfolio project to demonstrate backend development
 ## 🌐 Live Demo
 
 - Swagger UI:  
-👉 https://user-management-api-dco3.onrender.com/docs
+👉 https://user-management-api-awkr.onrender.com/docs
 
 ---
 
@@ -138,7 +138,7 @@ Copy
 Authorization: Bearer <your_token>
 
 👉 Full documentation available at:
-https://user-management-api-dco3.onrender.com/docs
+https://user-management-api-awkr.onrender.com/docs
 
 📌 Main Endpoints
 Public
