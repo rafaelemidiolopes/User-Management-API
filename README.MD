@@ -1,18 +1,18 @@
 # 🚀 User Management API
 
-![Python](https://img.shields.io/badge/python-3.10+-blue )
-![FastAPI](https://img.shields.io/badge/FastAPI-modern-green )
-![SQLAlchemy](https://img.shields.io/badge/ORM-SQLAlchemy%202.0-red )
-![MySQL](https://img.shields.io/badge/database-MySQL-orange )
-![Auth](https://img.shields.io/badge/auth-JWT%20%2B%20OAuth2-yellow )
-![Status](https://img.shields.io/badge/status-functional-brightgreen )
-![License](https://img.shields.io/badge/license-MIT-lightgrey )
+![Python](https://img.shields.io/badge/python-3.10+-blue)
+![FastAPI](https://img.shields.io/badge/FastAPI-modern-green)
+![SQLAlchemy](https://img.shields.io/badge/ORM-SQLAlchemy%202.0-red)
+![MySQL](https://img.shields.io/badge/database-MySQL-orange)
+![Auth](https://img.shields.io/badge/auth-JWT%20%2B%20OAuth2-yellow)
+![Status](https://img.shields.io/badge/status-functional-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-lightgrey)
 
 ---
 
 ## 📖 Overview
 
-A RESTful API for managing users and tasks with authentication, authorization, and role-based access control.
+A RESTful API for managing users and tasks with JWT-based authentication, role-based access control (admin/user), and a layered architecture designed for real-world backend applications.
 
 This project was built as a portfolio project to demonstrate backend development skills using FastAPI, focusing on real-world concepts like authentication, database relationships, and API design.
 
@@ -20,45 +20,45 @@ This project was built as a portfolio project to demonstrate backend development
 
 ## 🌐 Live Demo
 
-- Swagger UI:  
-👉 https://user-management-api-awkr.onrender.com/docs
+- **API Base URL:** https://user-management-api-awkr.onrender.com  
+- **Swagger UI:** https://user-management-api-awkr.onrender.com/docs  
 
 ---
 
 ## 📌 Features
 
-- JWT Authentication with OAuth2 Password Bearer
-- Role-based Access Control (Admin vs User)
-- User Management:
-  - Create users (admin only)
-  - Update profile (own user)
-  - Change password with validation
-  - Promote users to admin
-- Task Management (admin only)
-- One-to-Many relationship (User → Tasks)
-- Data validation with Pydantic v2
-- Proper HTTP status codes and error handling
-- Environment-based configuration
+- JWT Authentication with OAuth2 Password Bearer  
+- Role-based Access Control (Admin vs User)  
+- User Management:  
+  - Create users (admin only)  
+  - Update profile (own user)  
+  - Change password with validation  
+  - Promote users to admin  
+- Task Management (admin only)  
+- One-to-Many relationship (User → Tasks)  
+- Data validation with Pydantic v2  
+- Proper HTTP status codes and error handling  
+- Environment-based configuration  
 
 ---
 
 ## 🧱 Tech Stack
 
-- Python 3.10+
-- FastAPI
-- SQLAlchemy 2.0
-- Pydantic v2
-- PyJWT
-- pwdlib (password hashing)
-- MySQL
-- PyMySQL
-- python-dotenv
+- Python 3.10+  
+- FastAPI  
+- SQLAlchemy 2.0  
+- Pydantic v2  
+- PyJWT  
+- pwdlib (password hashing)  
+- MySQL  
+- PyMySQL  
+- python-dotenv  
 
 ---
 
 ## 📂 Project Structure
-```
 
+```
 .
 ├── models/                 # Database models (SQLAlchemy)
 │   ├── users.py
@@ -77,7 +77,6 @@ This project was built as a portfolio project to demonstrate backend development
 ├── main.py                 # Application entry point
 ├── .env
 └── .gitignore
-
 ```
 
 ---
@@ -87,12 +86,13 @@ This project was built as a portfolio project to demonstrate backend development
 ### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/user-management-api.git
+git clone https://github.com/rafaelemidiolopes/User-Management-API.git  
 cd user-management-api
+```
 
-2. Create virtual environment
-bash
-Copy
+### 2. Create virtual environment
+
+```bash
 python -m venv venv
 
 # Linux / macOS
@@ -100,94 +100,97 @@ source venv/bin/activate
 
 # Windows
 venv\Scripts\activate
+```
 
-3. Install dependencies
-bash
-Copy
+### 3. Install dependencies
+
+```bash
 pip install -r requirements.txt
+```
 
-4. Configure environment variables
-Create a .env file:
-env
-Copy
+### 4. Configure environment variables
+
+Create a `.env` file:
+
+```env
 DB_HOST=localhost
 DB_USER=root
 DB_PASSWORD=yourpassword
 DB_NAME=user_management_api
 SECRET_KEY=your-super-secret-key
+```
 
-5. Run the application
-bash
-Copy
+### 5. Run the application
+
+```bash
 uvicorn main:app --reload
+```
 
-🔐 Authentication
+---
+
+## 🔐 Authentication
+
 This API uses JWT tokens with OAuth2 Password Bearer flow.
-Get token
-bash
-Copy
-POST /login
-Body:
-plain
-Copy
-username=user@example.com
-password=yourpassword
-Use token
-plain
-Copy
+
+Get token:
+
+```bash
+curl -X POST "http://localhost:8000/login" \
+  -H "Content-Type: application/x-www-form-urlencoded" \
+  -d "username=user@example.com&password=yourpassword"
+```
+
+Use token:
+
+```http
 Authorization: Bearer <your_token>
+```
 
-👉 Full documentation available at:
-https://user-management-api-awkr.onrender.com/docs
+👉 Full documentation available at: https://user-management-api-awkr.onrender.com/docs
 
-📌 Main Endpoints
-Public
-POST /login
-Authenticated (User)
-GET /me
-PATCH /me
-PATCH /me/change-password
-DELETE /me
+---
 
-Admin Only
-POST /users
-GET /users
-PATCH /users/{id}
-DELETE /users/{id}
-PATCH /users/{id}/promote
-POST /tasks
-GET /tasks
-PATCH /tasks/{id}
-DELETE /tasks/{id}
+## 📌 Main Endpoints
 
-🧠 Architecture
+| Access Level | Endpoints |
+|-------------|----------|
+| Public | POST /login |
+| User | GET /me, PATCH /me, DELETE /me |
+| Admin | POST /users, GET /users, PATCH /users/{id}, DELETE /users/{id} |
+
+---
+
+## 🧱 Architecture
+
 The project follows a layered structure:
-Models → database structure
-Schemas → validation & serialization
-Services → business logic
-Security → authentication & authorization
-Routers → HTTP layer
-This separation improves:
-maintainability
-readability
-scalability
 
-🎯 Purpose
-This project was built to practice and demonstrate:
-Authentication & Authorization (JWT)
-API design
-Database relationships
-Backend architecture
-Real-world deployment
+| Layer | Responsibility |
+|------|----------------|
+| Models | Database structure (SQLAlchemy) |
+| Schemas | Validation & serialization (Pydantic) |
+| Services | Business logic |
+| Security | Authentication & authorization |
+| Routers | HTTP layer |
 
-⚠️ Limitations
-No pagination on list endpoints
-No automated tests
-No database migrations
-No rate limiting
+This separation improves:  
+Maintainability  
+Readability  
+Scalability  
 
-👨‍💻 Author
-Rafael Emídio
+---
 
-📄 License
+## 🎯 Purpose
+
+This project demonstrates backend development skills, including authentication, API design, database relationships, and production deployment.
+
+---
+
+## 👨‍💻 Author
+
+Rafael Emídio  
+
+---
+
+## 📄 License
+
 MIT License
